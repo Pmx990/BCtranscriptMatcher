@@ -38,7 +38,6 @@ def notTaken(d1_list,d2_list):
             notTakeList.append(i);
     print(notTakeList)
                
-print(same(d1_list,d2_list));
-print(noInProgram(d1_list,d2_list));
-print(notTaken(d1_list,d2_list));
-#diff
+same(d1_list,d2_list);
+noInProgram(d1_list,d2_list);
+notTaken(d1_list,d2_list);
