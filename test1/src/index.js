@@ -1,21 +1,34 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-//import App from './App';
 import * as serviceWorker from './serviceWorker';
 import Sidebar from './components/Sidebar'
-import BindEvent from './components/BindEvent'
+import Amplify from 'aws-amplify';
+import config from './config';
+import './index.css';
 
-import ShowSelected from './components/ShowSelected'
-
-
-/**
- * 
- * Now I am just calling the select page from sidebar
- * 
- * Course and clist are legacy, no need to look
- * 
- */
+Amplify.configure({
+    Auth: {
+        mandatorySignIn: true,
+        region: config.cognito.region,
+        userPoolId: config.cognito.USER_POOL_ID,
+        identityPoolId: config.cognito.IDENTITY_POOL_ID,
+        userPoolWebClientId: config.cognito.APP_CLIENT_ID
+    },
+    Storage: {
+        region: config.s3.REGION,
+        bucket: config.s3.BUCKET,
+        identityPoolId: config.cognito.IDENTITY_POOL_ID
+    },
+    API: {
+        endpoints: [
+            {
+                name: "bcadmin",
+                endpoint: config.apiGateway.URL,
+                region: config.apiGateway.REGION,
+            }
+        ]
+    }
+});
 
 console.log(typeof(cc))
 ReactDOM.render(

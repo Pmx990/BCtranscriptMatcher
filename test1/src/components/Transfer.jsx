@@ -86,7 +86,7 @@ const leftTableColumns = [
 ];
 const rightTableColumns = [
   {
-    dataIndex: 'title',
+    dataIndex: 'key',
     title: 'Name',
   },
 ];
@@ -141,36 +141,59 @@ export default class Trans extends React.Component {
   
   
   render() {
-
     var arr = Object.keys(this.props).map(key => this.props[key]);
     const mockData = [];
-for (let i = 0; i < arr.length; i++) {
-  mockData.push({
-    key: arr[i].dep+" "+arr[i].no,
-    title: arr[i].dep+arr[i].no,
-    description: arr[i].name,
-    //disabled: i % 4 === 0,
-    tag: arr[i].dep,
-  });
-}
-  //const originTargetKeys = mockData.filter(item => +item.key % 3 > 1).map(item => item.key);
-  //this.setState({course:mockData,
-  //  targetKeys: originTargetKeys});
-  //console.log(this.state.course)
 
+    // Render class data
+    for (let i = 0; i < arr.length; i++) {
+      for (let x = 0; x < arr[i].length; x++) {
+        console.log()
+        mockData.push({
+          key: arr[i][x].slug + " " + arr[i][x].id,
+          title: arr[i][x].slug,
+          description: arr[i][x].title,
+          //disabled: i % 4 === 0,
+          tag: arr[i][x].id
+        });
+      }
+    }
 
-    
+    /*
+    // Render slug data 
+    for (let i = 0; i < arr.length; i++) {
+      mockData.push({
+        key: arr[i].slug,
+        title: arr[i].slug,
+        description: arr[i].title,
+        //disabled: i % 4 === 0,
+        tag: arr[i].coursePrefixes
+      });
+    }
+    */
+
+    /*
+    for (let i = 0; i < arr.length; i++) {
+      mockData.push({
+        key: arr[i].dep+" "+arr[i].no,
+        title: arr[i].dep+arr[i].no,
+        description: arr[i].name,
+        //disabled: i % 4 === 0,
+        tag: arr[i].dep,
+      });
+    }
+    */
+
     const { targetKeys, disabled, showSearch } = this.state;
     return (
-      <div>
-      <h1 style={{ color:"#FF8F59", fontSize: '35px', fontWeight: 200, textAlign: 'center' }}>Course Management</h1>
+        <div>
+          <h1 style={{ color:"#FF8F59", fontSize: '35px', fontWeight: 200, textAlign: 'center' }}>Course Management</h1>
 
-<Divider>How to Use</Divider>
-    <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
-    <Divider>Classes</Divider>
+          <Divider>How to Use</Divider>
+          <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
+          <Divider>Classes</Divider>
     
-    <div>
-                <Button type="primary"style={{ background: "#FF8F59", borderColor: "#ff7a45" }} onClick={this.showDrawer}   >Selected</Button>
+          <div>
+            <Button type="primary"style={{ background: "#FF8F59", borderColor: "#ff7a45" }} onClick={this.showDrawer}   >Selected</Button>
             <Drawer
                     title="Selected courses:"
                     placement="right"
@@ -180,15 +203,15 @@ for (let i = 0; i < arr.length; i++) {
                 >
                 {console.log(this.state.targetKeys)}
                 {this.state.targetKeys.map(item => {
-                return <div>
-                  <h5>{item}</h5>
-                </div>
-
-            })}
+                  return  <div>
+                            <h5>{item}</h5>
+                          </div>
+                  })
+                }
                 
-                </Drawer>
+            </Drawer>
 
-            </div>  
+          </div>  
         <TableTransfer
           dataSource={mockData}
           targetKeys={Object.keys(this.state.targetKeys).map(key => this.state.targetKeys[key])}

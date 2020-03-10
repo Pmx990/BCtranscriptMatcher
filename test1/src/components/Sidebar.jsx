@@ -1,15 +1,9 @@
 import React from 'react';
 import { Layout, Menu, Breadcrumb } from 'antd';
-import './Sidebar.css'
 import Clist from './Clist'
 import Trans from './Transfer'
-
-
-/**
- * 
- * This is only providing the sidebar(with no functionality) and calling the Trans
- * 
- */
+import {API} from 'aws-amplify'
+import './Sidebar.css'
 
 import {
   DesktopOutlined,
@@ -36,11 +30,89 @@ var cc=[
 
 
 export default class Sidebar extends React.Component {
+  constructor(props) {
+    super(props) 
+
+    this.state = {
+      collapsed: false,
+      slugs: [],
+      classes: [],
+      showing:<Trans />
+    };
+
+    
+  }
+  /*
   state = {
     collapsed: false,
     showing:<Trans {...cc}/>
   };
+  */
+  componentDidMount() {
+    console.log("Pulling Slugs");
+    this.pullSlugList();
+    console.log("Pulling Classes");
+    
+    console.log("Pulling complete");
+  }
 
+  async pullSlugList() {
+      try {
+        const returnedSlugs = await this.loadSlugs();
+        returnedSlugs.sort(function(itemOne, itemTwo){
+          if (itemOne.slug > itemTwo.slug){
+              return 1
+          }
+          return -1;
+          }
+        );
+        console.log(returnedSlugs);
+        this.setState({slugs: returnedSlugs});
+        
+        this.pullClassList();
+      }
+      catch (e) {
+        console.log("Failure");
+        console.log(e);
+      }
+  }
+
+  async pullClassList() {
+    var returnedClasses = [];
+    for (var index in this.state.slugs) {
+      try {
+        var tempClassList =  await this.loadClasses(this.state.slugs[index].slug);
+        returnedClasses.push(tempClassList);
+      }
+        catch (e){
+        console.log(e);
+      }
+    }
+
+    returnedClasses.sort(function(itemOne, itemTwo){
+      if (itemOne.id > itemTwo.id){
+        return -1
+      }
+        return 1;
+      }
+    );
+
+    console.log(returnedClasses);
+    this.setState({classes: returnedClasses});
+    this.setState({showing: <Trans {...returnedClasses} />});
+  }
+
+  loadSlugs() {
+    console.log("Loading slugs");
+    return API.get("bcadmin", "/slug");
+  }
+
+  loadClasses(slug) {
+    return API.get("bcadmin", `/class/${slug}`, {
+      body: slug
+    });
+  }
+ 
   onCollapse = collapsed => {
     console.log(collapsed);
     this.setState({ collapsed });
