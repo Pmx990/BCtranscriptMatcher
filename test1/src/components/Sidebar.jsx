@@ -3,6 +3,7 @@ import { Layout, Menu, Breadcrumb } from 'antd';
 import Clist from './Clist'
 import Trans from './Transfer'
 import {API} from 'aws-amplify'
+import LoadingOverlay from 'react-loading-overlay'
 import './Sidebar.css'
 
 import {
@@ -35,6 +36,7 @@ export default class Sidebar extends React.Component {
 
     this.state = {
       collapsed: false,
+      doneLoading: false,
       slugs: [],
       classes: [],
       showing:<Trans />
@@ -100,6 +102,7 @@ export default class Sidebar extends React.Component {
     console.log(returnedClasses);
     this.setState({classes: returnedClasses});
     this.setState({showing: <Trans {...returnedClasses} />});
+    this.setState({doneLoading: true});
   }
 
   loadSlugs() {
@@ -171,7 +174,18 @@ export default class Sidebar extends React.Component {
               <Breadcrumb.Item>Bill</Breadcrumb.Item>
             </Breadcrumb>
             <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-            {this.state.showing}
+              {this.state.doneLoading
+                ?
+                  this.state.showing
+                :
+                <LoadingOverlay
+                  active={true}
+                  spinner={true}
+                  text='Loading available classes...'
+                >
+                  {this.state.showing}
+                </LoadingOverlay>
+              }
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>Bellevue College</Footer>
