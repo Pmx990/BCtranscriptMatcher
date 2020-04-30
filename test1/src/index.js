@@ -1,10 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './index.css';
 import * as serviceWorker from './serviceWorker';
 import Sidebar from './components/Sidebar'
-import Amplify from 'aws-amplify';
+import LoginPage from './components/LoginPage'
+import BackGround from './components/BackGround'
+import BindEvent from './components/BindEvent'
+import ShowSelected from './components/ShowSelected'
+import Amplify from 'aws-amplify'
 import config from './config';
-import './index.css';
+import Router from './Router'
+
+
 
 Amplify.configure({
     Auth: {
@@ -32,12 +39,13 @@ Amplify.configure({
 
 console.log(typeof(cc))
 ReactDOM.render(
-    <div>
-        <Sidebar />, mountNode
-        
-        
-    </div>,document.getElementById('root')
+//    <Sidebar />, mountNode
     
+        <Router/>
+        
+
+
+    ,document.getElementById('root')
 )
 
 serviceWorker.unregister();
